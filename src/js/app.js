@@ -315,7 +315,29 @@ function bindFloatingButton() {
   window.addEventListener('scroll', updateVisibility, { passive: true });
 }
 
+function bindThemeSwitcher() {
+  const choices = $$('[data-theme-choice]');
+  if (!choices.length) return;
+  const supportedThemes = new Set(choices.map((button) => button.dataset.themeChoice));
+  let savedTheme = 'signature';
+  try {
+    const storedTheme = localStorage.getItem('unicfit-theme');
+    if (supportedThemes.has(storedTheme)) savedTheme = storedTheme;
+  } catch { /* Storage can be unavailable in private browsing contexts. */ }
+
+  const applyTheme = (theme) => {
+    if (!supportedThemes.has(theme)) return;
+    document.documentElement.dataset.theme = theme;
+    choices.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === theme)));
+    try { localStorage.setItem('unicfit-theme', theme); } catch { /* Theme remains active for this page view. */ }
+  };
+
+  choices.forEach((button) => button.addEventListener('click', () => applyTheme(button.dataset.themeChoice)));
+  applyTheme(savedTheme);
+}
+
 function init() {
+  bindThemeSwitcher();
   bindMobileMenu();
   bindSmoothScroll();
   bindFaq();
