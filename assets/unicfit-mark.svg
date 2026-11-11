@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Símbolo provisório inspirado na paleta Unicfit">
+  <defs><linearGradient id="g" x1="6" y1="40" x2="42" y2="8" gradientUnits="userSpaceOnUse"><stop stop-color="#5dd9f0"/><stop offset=".48" stop-color="#3054f3"/><stop offset="1" stop-color="#9527a4"/></linearGradient></defs>
+  <rect x="1" y="1" width="46" height="46" rx="12" fill="#191720" stroke="#ffffff" stroke-opacity=".12"/>
+  <path d="m12 34 8-20h5l-8 20h-5Zm9 0 8-20h5l-8 20h-5Zm9 0 7-17h-5l-2 5" fill="none" stroke="url(#g)" stroke-linecap="square" stroke-width="3.2"/>
+</svg>
