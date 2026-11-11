@@ -1,0 +1,40 @@
+# Sistema operacional
+Thumbs.db
+Thumbs.db:encryptable
+.DS_Store
+.DS_Store?
+._*
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editores e configurações locais
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Dependências, caches e artefatos de build
+node_modules/
+.npm/
+.cache/
+.parcel-cache/
+.vite/
+dist/
+build/
+coverage/
+
+# Temporários e logs locais
+tmp/
+temp/
+*.tmp
+*.temp
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Segredos e variáveis de ambiente locais
+.env
+.env.*
+!.env.example
