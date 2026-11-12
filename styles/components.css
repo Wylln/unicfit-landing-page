@@ -632,8 +632,8 @@
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
+  border-radius: 14px;
+  background: #101014;
   box-shadow: var(--shadow-sm);
   transition: transform 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
 }
@@ -648,7 +648,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
+  min-height: 58px;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -677,9 +678,10 @@
 }
 
 .reel-badge-link {
-  padding: 5px 10px;
-  border-radius: var(--radius-sm);
-  background: var(--color-purple);
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(139, 92, 246, 0.38);
   color: #fff;
   font-size: 10px;
   font-weight: 800;
@@ -693,7 +695,7 @@
 
 .reel-media {
   position: relative;
-  aspect-ratio: 4 / 4.8;
+  aspect-ratio: 324 / 383;
   overflow: hidden;
   background: #000;
 }
@@ -712,7 +714,7 @@
 .reel-media-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11,11,15,0.1) 30%, rgba(11,11,15,0.85) 100%);
+  background: linear-gradient(180deg, rgba(11,11,15,0.05) 40%, rgba(11,11,15,0.45) 100%);
 }
 
 .reel-play-btn {
@@ -726,8 +728,8 @@
   gap: 8px;
   padding: 14px 20px;
   border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 12px;
-  background: rgba(11, 11, 15, 0.65);
+  border-radius: 999px;
+  background: rgba(11, 11, 15, 0.72);
   backdrop-filter: blur(8px);
   color: #fff;
   transition: all 0.25s var(--ease-out);
@@ -737,6 +739,8 @@
   width: 32px;
   height: 32px;
   fill: #fff;
+  stroke: #fff;
+  stroke-width: 1.2;
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
 }
 
@@ -753,7 +757,7 @@
 }
 
 .reel-body {
-  padding: 16px;
+  padding: 12px 14px 10px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -763,8 +767,7 @@
   font-size: 13px;
   line-height: 1.55;
   color: var(--color-text-body);
-  margin: 0 0 16px;
-  flex: 1;
+  margin: 5px 0 8px;
 }
 
 .reel-caption strong {
@@ -780,6 +783,22 @@
   border-top: 1px solid var(--color-border);
 }
 
+.reel-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.reel-actions a { display: inline-flex; color: var(--color-text); transition: color .2s, transform .2s; }
+.reel-actions a:hover { color: #c4a7ff; transform: translateY(-1px); }
+.reel-actions svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.reel-actions .reel-save { margin-left: auto; }
+.reel-likes { margin: 0; color: var(--color-text); font-size: 12px; font-weight: 800; }
+.reel-comment-box { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 9px; margin-top: auto; border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 11px; }
+.reel-comment-box svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.reel-comment-box .reel-icon-dot { fill: currentColor; stroke: none; }
+
 .reel-tag {
   font-size: 10px;
   font-weight: 800;
@@ -788,6 +807,8 @@
 }
 
 .reel-link {
+  display: inline-block;
+  margin-top: 2px;
   font-size: 11px;
   font-weight: 800;
   color: var(--color-purple);
