@@ -3,36 +3,34 @@ import { findPlan, findUnit, unicfitData } from '../data/unicfitData.js';
 const cleanPhone = (value = '') => value.replace(/\D/g, '');
 
 /**
- * Return a wa.me URL only when a real, confirmed destination is configured.
- * A missing number deliberately returns null so the UI can show a safe demo
- * contact prompt instead of sending visitors to a made-up destination.
+ * Return official wa.me URL for Unicfit WhatsApp atendimento.
+ * Number: 5596981295678 (Macapá · AP)
  */
 export function generateWhatsAppUrl(planId, unitId, customSubject) {
-  const number = cleanPhone(unicfitData.contact.whatsapp || unicfitData.contact.phone);
-  if (!unicfitData.contact.isConfirmed || number.length < 12 || number.length > 15) {
-    return null;
-  }
+  const number = cleanPhone(unicfitData.contact.whatsapp) || '5596981295678';
+  const defaultMsg = 'Olá, gostaria de saber mais informações sobre os planos e a academia';
 
   const plan = findPlan(planId);
   const unit = findUnit(unitId);
-  const subject = customSubject?.trim();
-  const details = [
-    subject || (plan ? `Tenho interesse no ${plan.name}` : 'Gostaria de conhecer a Unicfit'),
-    unit ? `da unidade ${unit.name}` : '',
-    'e gostaria de receber mais informações.',
-  ].filter(Boolean).join(' ');
-  const message = `Olá, ${unicfitData.brand.name}! ${details}`;
+
+  let message = defaultMsg;
+  if (customSubject?.trim()) {
+    message = customSubject.trim();
+  } else if (plan && unit) {
+    message = `Olá, gostaria de saber mais informações sobre os planos e a academia (interesse no ${plan.name} na unidade ${unit.name}).`;
+  } else if (plan) {
+    message = `Olá, gostaria de saber mais informações sobre os planos e a academia (interesse no ${plan.name}).`;
+  } else if (unit) {
+    message = `Olá, gostaria de saber mais informações sobre os planos e a academia (unidade ${unit.name}).`;
+  }
 
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
 export function getWhatsAppAction(planId, unitId, customSubject) {
-  const url = generateWhatsAppUrl(planId, unitId, customSubject);
-  return url
-    ? { available: true, url }
-    : {
-        available: false,
-        url: null,
-        message: 'O WhatsApp oficial será adicionado após confirmação da academia.',
-      };
+  return {
+    available: true,
+    url: generateWhatsAppUrl(planId, unitId, customSubject),
+    message: 'Redirecionando para o WhatsApp oficial da Unicfit...',
+  };
 }

@@ -4,19 +4,29 @@ import { getWhatsAppAction } from './whatsapp.js';
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const reducedMotion = typeof window !== 'undefined' && window.matchMedia
-  ? window.matchMedia('(prefers-reduced-motion: reduce)')
-  : { matches: true };
+  ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  : false;
 
 const EARTH_RADIUS_KM = 6371;
 
-export function calculateDistanceKm(pointA, pointB) {
-  const toRadians = (degrees) => degrees * (Math.PI / 180);
-  const latitudeDelta = toRadians(pointB.lat - pointA.lat);
-  const longitudeDelta = toRadians(pointB.lng - pointA.lng);
-  const latitudeA = toRadians(pointA.lat);
-  const latitudeB = toRadians(pointB.lat);
-  const haversine = Math.sin(latitudeDelta / 2) ** 2
-    + Math.cos(latitudeA) * Math.cos(latitudeB) * Math.sin(longitudeDelta / 2) ** 2;
+function toRadians(degrees) {
+  return (degrees * Math.PI) / 180;
+}
+
+export function calculateDistanceKm(from, to) {
+  if (!from || !to) return Infinity;
+  const dLat = toRadians(to.lat - from.lat);
+  const dLng = toRadians(to.lng - from.lng);
+  const lat1 = toRadians(from.lat);
+  const lat2 = toRadians(to.lat);
+
+  const sinHalfDLat = Math.sin(dLat / 2);
+  const sinHalfDLng = Math.sin(dLng / 2);
+
+  const haversine =
+    sinHalfDLat * sinHalfDLat +
+    Math.cos(lat1) * Math.cos(lat2) * sinHalfDLng * sinHalfDLng;
+
   return 2 * EARTH_RADIUS_KM * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 }
 
@@ -29,7 +39,7 @@ export function buildGoogleMapsRouteUrl(origin, destination) {
 
 export function buildGoogleMapsEmbedUrl(unit) {
   const query = `${unit.lat},${unit.lng}`;
-  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`;
+  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=17&output=embed`;
 }
 
 function headerOffset() {
@@ -37,72 +47,12 @@ function headerOffset() {
 }
 
 function scrollToSection(target) {
-  const top = target.getBoundingClientRect().top + window.scrollY - headerOffset() - 12;
-  window.scrollTo({ top, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
-}
-
-function getOrCreateContactDialog() {
-  let dialog = $('#contact-modal');
-  if (dialog) return dialog;
-
-  dialog = document.createElement('dialog');
-  dialog.id = 'contact-modal';
-  dialog.className = 'contact-modal';
-  dialog.setAttribute('aria-labelledby', 'contact-modal-title');
-  dialog.style.cssText = 'max-width:min(92vw,32rem);border:1px solid #51445f;border-radius:1rem;padding:2rem;background:#191720;color:#f2f1f5;box-shadow:0 1rem 4rem #0009';
-  dialog.innerHTML = `
-    <button type="button" class="contact-modal__close" data-modal-close aria-label="Fechar">&times;</button>
-    <p class="contact-modal__eyebrow">Demonstração</p>
-    <h2 id="contact-modal-title">Vamos conversar sobre seu treino?</h2>
-    <p data-modal-copy></p>
-    <div class="contact-modal__actions">
-      <a class="btn-whatsapp" data-modal-whatsapp hidden target="_blank" rel="noopener noreferrer">Continuar no WhatsApp</a>
-      <button type="button" data-copy-message>Copiar mensagem</button>
-      <button type="button" data-modal-close>Fechar</button>
-    </div>`;
-  document.body.append(dialog);
-
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog || event.target.closest('[data-modal-close]')) dialog.close();
-    if (event.target.closest('[data-copy-message]')) {
-      const copy = $('[data-modal-copy]', dialog)?.textContent ?? '';
-      const button = $('[data-copy-message]', dialog);
-      if (!navigator.clipboard?.writeText) {
-        if (button) button.textContent = 'Selecione e copie a mensagem acima';
-        return;
-      }
-      navigator.clipboard.writeText(copy).then(() => {
-        if (button) button.textContent = 'Mensagem copiada';
-      }).catch(() => {
-        if (button) button.textContent = 'Selecione e copie a mensagem acima';
-      });
-    }
+  if (!target) return;
+  const top = target.getBoundingClientRect().top + window.scrollY - headerOffset() - 16;
+  window.scrollTo({
+    top: Math.max(0, top),
+    behavior: reducedMotion ? 'auto' : 'smooth',
   });
-  dialog.addEventListener('close', () => {
-    const button = $('[data-copy-message]', dialog);
-    if (button) button.textContent = 'Copiar mensagem';
-  });
-  return dialog;
-}
-
-function openContactModal({ planId, unitId, subject } = {}) {
-  const plan = findPlan(planId);
-  const unit = findUnit(unitId);
-  const dialog = getOrCreateContactDialog();
-  const planText = plan ? `Tenho interesse no ${plan.name}.` : '';
-  const unitText = unit ? ` Unidade: ${unit.name}.` : '';
-  const message = `Olá, gostaria de conversar com a equipe da ${unicfitData.brand.name}. ${subject ?? planText}${unitText}`.trim();
-  $('[data-modal-copy]', dialog).textContent = `${message} ${unicfitData.contact.pendingLabel}`;
-  const whatsApp = $('[data-modal-whatsapp]', dialog);
-  const action = getWhatsAppAction(planId, unitId, subject);
-  if (action.available) {
-    whatsApp.href = action.url;
-    whatsApp.hidden = false;
-  } else {
-    whatsApp.hidden = true;
-    whatsApp.removeAttribute('href');
-  }
-  if (!dialog.open) dialog.showModal();
 }
 
 function bindMobileMenu() {
@@ -112,24 +62,16 @@ function bindMobileMenu() {
 
   const setOpen = (open) => {
     button.setAttribute('aria-expanded', String(open));
+    button.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
     menu.hidden = !open;
-    menu.style.display = open ? '' : 'none';
-    menu.classList.toggle('is-open', open);
-    button.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
   };
-  setOpen(false);
-  button.addEventListener('click', (event) => {
-    event.stopPropagation();
+
+  button.addEventListener('click', () => {
     setOpen(button.getAttribute('aria-expanded') !== 'true');
   });
+
   menu.addEventListener('click', (event) => {
-    if (event.target.closest('a, button')) setOpen(false);
-  });
-  document.addEventListener('click', (event) => {
-    if (button.getAttribute('aria-expanded') === 'true' && !menu.contains(event.target) && !button.contains(event.target)) setOpen(false);
-  });
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') setOpen(false);
+    if (event.target.closest('a')) setOpen(false);
   });
 }
 
@@ -180,26 +122,24 @@ function bindPlanSelection() {
     event.preventDefault();
     const planId = button.dataset.plan;
     const planName = findPlan(planId)?.name ?? $('.plan-card h3', button.closest('.plan-card'))?.textContent.trim();
-    const subject = planName ? `Tenho interesse no plano ${planName}.` : undefined;
-    document.dispatchEvent(new CustomEvent('unicfit:plan-selected', { detail: { planId, plan: findPlan(planId) } }));
+    const subject = planName ? `Olá, gostaria de saber mais informações sobre os planos e a academia (interesse no ${planName}).` : undefined;
     const action = getWhatsAppAction(planId, button.dataset.unit, subject);
-    if (action.available) window.open(action.url, '_blank', 'noopener,noreferrer');
-    else openContactModal({ planId, unitId: button.dataset.unit, subject });
+    window.open(action.url, '_blank', 'noopener,noreferrer');
   });
 }
 
 function bindWhatsAppCtas() {
-  const selectors = '#btn-cta-hero, #btn-whatsapp-floating, .btn-whatsapp';
+  const selectors = '#btn-cta-hero, #btn-whatsapp-floating, .btn-whatsapp, a[href*="wa.me"]';
   $$(selectors).forEach((button) => {
     button.addEventListener('click', (event) => {
-      const action = getWhatsAppAction(button.dataset.plan, button.dataset.unit, button.dataset.subject);
+      const plan = button.dataset.plan;
+      const unit = button.dataset.unit;
+      const subject = button.dataset.subject;
+      const action = getWhatsAppAction(plan, unit, subject);
       if (action.available) {
         event.preventDefault();
         window.open(action.url, '_blank', 'noopener,noreferrer');
-        return;
       }
-      event.preventDefault();
-      openContactModal({ planId: button.dataset.plan, unitId: button.dataset.unit, subject: button.dataset.subject });
     });
   });
 }
@@ -224,11 +164,11 @@ function updateMapAndRoute(unit, origin) {
   const mapFrame = $('#units-map-frame');
   if (mapFrame) {
     mapFrame.src = buildGoogleMapsEmbedUrl(unit);
-    mapFrame.title = `Mapa da unidade ${unit.name}`;
+    mapFrame.title = `Mapa da ${unit.name} em Macapá`;
   }
   const routeLink = $('#btn-open-route');
   if (routeLink) {
-    routeLink.href = buildGoogleMapsRouteUrl(origin, unit.address);
+    routeLink.href = unit.mapsUrl || buildGoogleMapsRouteUrl(origin, unit.address);
     routeLink.target = '_blank';
     routeLink.rel = 'noopener noreferrer';
   }

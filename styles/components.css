@@ -99,7 +99,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 68%;
+  width: 65%;
   height: 100%;
   pointer-events: none;
   z-index: 1;
@@ -112,27 +112,29 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 80% center;
+  object-position: right center;
+  filter: contrast(1.15) saturate(1.18) brightness(0.85);
 }
 
 .hero-slash-line {
   position: absolute;
   width: 3px;
   height: 150%;
-  background: linear-gradient(180deg, var(--color-cyan) 0%, var(--color-purple) 70%, transparent 100%);
-  transform: rotate(-32deg);
+  background: linear-gradient(180deg, var(--color-cyan) 0%, var(--color-purple) 65%, transparent 100%);
+  transform: rotate(-30deg);
   top: -25%;
-  right: 48%;
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.7), 0 0 45px rgba(6, 182, 212, 0.4);
-  opacity: 0.75;
+  right: 50%;
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.75), 0 0 50px rgba(6, 182, 212, 0.45);
+  opacity: 0.85;
 }
 
 .hero-overlay-dark {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, var(--color-bg) 0%, rgba(11, 11, 15, 0.92) 15%, rgba(11, 11, 15, 0.25) 50%, transparent 100%),
-    linear-gradient(0deg, var(--color-bg) 0%, transparent 25%);
+    linear-gradient(90deg, #0B0B0F 0%, rgba(11, 11, 15, 0.95) 15%, rgba(11, 11, 15, 0.35) 55%, rgba(11, 11, 15, 0.7) 100%),
+    radial-gradient(ellipse at 78% 45%, rgba(139, 92, 246, 0.22) 0%, rgba(109, 40, 217, 0.08) 50%, transparent 75%),
+    linear-gradient(180deg, #0B0B0F 0%, transparent 15%, transparent 80%, #0B0B0F 100%);
 }
 
 .hero-container {
