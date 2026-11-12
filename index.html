@@ -4,6 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0B0B0F">
+    <script>
+      (function() {
+        if (window.location.hostname.endsWith('github.io')) {
+          var pathSegments = window.location.pathname.split('/').filter(Boolean);
+          if (pathSegments.length > 0) {
+            var base = document.createElement('base');
+            base.href = '/' + pathSegments[0] + '/';
+            document.head.appendChild(base);
+          }
+          if (!window.location.pathname.endsWith('/') && !window.location.pathname.endsWith('.html')) {
+            window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+          }
+        }
+      })();
+    </script>
     <meta name="description" content="Unicfit Academia em Macapá. Sua força, seu próximo nível. Musculação, infraestrutura completa e unidades em Congós e Santa Inês.">
     <title>Unicfit Academia — Sua Força. Seu Próximo Nível.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,7 +114,7 @@
             <!-- Card 1: Modalidades -->
             <article class="bento-card bento-card-modalities">
               <div class="bento-card-bg">
-                <img src="assets/unicfit-interior.jpg" alt="" loading="lazy">
+                <img src="assets/unicfit-interior.jpg" alt="Interior da academia Unicfit" loading="eager">
                 <div class="bento-card-overlay purple-beam"></div>
               </div>
               <div class="bento-card-content">
@@ -127,7 +142,7 @@
             <!-- Card 3: Duas Unidades com Foto Real da Fachada Noturna -->
             <article class="bento-card bento-card-facade">
               <div class="bento-card-bg">
-                <img src="assets/unicfit-facade.png" alt="Fachada da Unicfit com letreiro noturno" loading="lazy">
+                <img src="assets/unicfit-facade.png" alt="Fachada da Unicfit com letreiro noturno" loading="eager">
                 <div class="bento-card-overlay facade-overlay"></div>
               </div>
               <div class="bento-card-content">
@@ -152,7 +167,7 @@
             <!-- Card 5 (Super Banner): Infraestrutura Completa (Salão Real com Neon Roxo) -->
             <article class="bento-card bento-card-wide-structure" id="structure">
               <div class="bento-card-bg">
-                <img src="assets/unicfit-interior.jpg" alt="Salão de musculação da Unicfit iluminado com luzes roxas e azuis" loading="lazy">
+                <img src="assets/unicfit-interior.jpg" alt="Salão de musculação da Unicfit iluminado com luzes roxas e azuis" loading="eager">
                 <div class="bento-card-overlay structure-wide-overlay"></div>
               </div>
               <div class="bento-card-content">
@@ -273,7 +288,7 @@
                 <a class="reel-badge-link" href="https://www.instagram.com/unicfit_mcp" target="_blank" rel="noopener noreferrer">Ver perfil</a>
               </div>
               <div class="reel-media">
-                <img src="assets/unicfit-interior.jpg" alt="Treino na Unicfit" loading="lazy">
+                <img src="assets/unicfit-interior.jpg" alt="Treino na Unicfit" loading="eager">
                 <div class="reel-media-overlay"></div>
                 <a class="reel-play-btn" href="https://www.instagram.com/unicfit_mcp" target="_blank" rel="noopener noreferrer" aria-label="Assistir no Instagram">
                   <svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></svg>
@@ -299,7 +314,7 @@
                 <a class="reel-badge-link" href="https://www.instagram.com/unicfit_mcp" target="_blank" rel="noopener noreferrer">Ver perfil</a>
               </div>
               <div class="reel-media">
-                <img src="assets/unicfit-interior.jpg" alt="Aparelhos de musculação da Unicfit" loading="lazy">
+                <img src="assets/unicfit-facade-sharp.png" alt="Aparelhos de musculação da Unicfit" loading="eager">
                 <div class="reel-media-overlay"></div>
                 <a class="reel-play-btn" href="https://www.instagram.com/unicfit_mcp" target="_blank" rel="noopener noreferrer" aria-label="Assistir no Instagram">
                   <svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></svg>
@@ -325,7 +340,7 @@
                 <a class="reel-badge-link" href="https://www.instagram.com/unicfit_mcp" target="_blank" rel="noopener noreferrer">Ver perfil</a>
               </div>
               <div class="reel-media">
-                <img src="assets/unicfit-interior.jpg" alt="Comunidade Unicfit" loading="lazy">
+                <img src="assets/ref-ironberg-instagram.png" alt="Comunidade Unicfit" loading="eager">
                 <div class="reel-media-overlay"></div>
                 <a class="reel-play-btn" href="https://www.instagram.com/unicfit_mcp" target="_blank" rel="noopener noreferrer" aria-label="Assistir no Instagram">
                   <svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"/></svg>
