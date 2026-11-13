@@ -795,6 +795,7 @@
 .reel-actions svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .reel-actions .reel-save { margin-left: auto; }
 .reel-likes { margin: 0; color: var(--color-text); font-size: 12px; font-weight: 800; }
+.reel-comments { margin: 4px 0 0; color: var(--color-muted); font-size: 11px; }
 .reel-comment-box { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 9px; margin-top: auto; border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 11px; }
 .reel-comment-box svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .reel-comment-box .reel-icon-dot { fill: currentColor; stroke: none; }
